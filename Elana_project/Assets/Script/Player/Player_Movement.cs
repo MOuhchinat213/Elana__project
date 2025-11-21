@@ -6,7 +6,7 @@ public class Player_Movement : MonoBehaviour
 {
     public Rigidbody2D rb;
     public SpriteRenderer sr;
-
+    public Transform Camera;
     public int last_direction;
     public float jump_speed=6;
     public float RunSpeed=6f;
@@ -20,6 +20,7 @@ public class Player_Movement : MonoBehaviour
 
     void Update()
     {
+        
         if(Input.GetKeyDown(KeyCode.Space))
         {
             Jump();
