@@ -17,6 +17,7 @@ public class Player_Movement : MonoBehaviour
     [SerializeField] private float groundCheckDistance = 0.13f;
     [SerializeField] private bool isGrounded;
     [SerializeField] private LayerMask whatIsGround;
+    [SerializeField] private Transform GroundCheck;
 
     void Awake()
     {
@@ -66,7 +67,7 @@ public class Player_Movement : MonoBehaviour
 
     private void HandleCollision()
     {
-        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGround);
+        isGrounded = Physics2D.OverlapCircle(GroundCheck.position, 0.1f, whatIsGround);
         if(isGrounded)
             bonusJump = true;
     }
