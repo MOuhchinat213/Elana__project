@@ -64,6 +64,7 @@ public class Player_Movement : MonoBehaviour
 
     void Horizontal_Move()
     {
+
         float input = Input.GetAxis("Horizontal");
         //animator.SetFloat("speed",Mathf.Abs(input));
         rb.linearVelocityX = RunSpeed*input;
