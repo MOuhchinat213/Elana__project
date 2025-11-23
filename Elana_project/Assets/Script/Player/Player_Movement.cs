@@ -1,94 +1,94 @@
 using UnityEngine;
 
-
-
 public class Player_Movement : MonoBehaviour
 {
-    //STAT
-    public Combat_player player;
-    //COMPONENT
-    public Rigidbody2D rb;
-    public SpriteRenderer sr;
-   
-   //MOVEMENT
-    public int last_direction;
-    public float RunSpeed=6f;
-    public Transform Hitbox;  
-    //public Animator animator;
- 
+    private Rigidbody2D rb;
+    private Animator anim;
+    
+    
+    [Header("Movement details")]
+    [SerializeField] private float moveSpeed = 3.5f;
+    [SerializeField] private float jumpForce = 3;
+    [SerializeField] private bool bonusJump = true;
+    private float xInput;
+    private bool facingRight = true;
 
-    //JUMPING
-    public bool isGrounded; 
-    public LayerMask LayerGround;
-    public Transform GroundCheck;
-    public int maxJumps = 1;
-    public int jumpsRemaining;
-    public float jump_speed=6;
+    [Header("Collision details")]
+    [SerializeField] private float groundCheckDistance = 0.13f;
+    [SerializeField] private bool isGrounded;
+    [SerializeField] private LayerMask whatIsGround;
+    [SerializeField] private Transform GroundCheck;
 
-
-    void Start()
+    void Awake()
     {
-        player=GetComponent<Combat_player>();
-        //animator= GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        sr= GetComponent<SpriteRenderer>();
-
+        anim = GetComponentInChildren<Animator>();
     }
+
     void Update()
     {
-        if(player.Health<=0)
-            {
-                //animator.settrigger("dead");
-                return;
-            }
-        isGrounded = Physics2D.OverlapCircle(GroundCheck.position, 0.1f, LayerGround);
-        if (isGrounded)
+        HandleCollision();
+        HandleInput();
+        HandleMovement();
+        HandleFlip();
+        HandleAnimations();
+    }
+
+    private void HandleInput()
+    {
+        xInput = Input.GetAxisRaw("Horizontal");
+
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            jumpsRemaining = maxJumps;
-        }
-        if(Input.GetKeyDown(KeyCode.Space) && jumpsRemaining > 0)
-        {
-            
             Jump();
-            
         }
-
-            Horizontal_Move();
     }
-    void Jump()
+
+    private void HandleAnimations()
     {
-            if(!isGrounded)
-                jumpsRemaining--;
-
-            float input= Input.GetAxisRaw("Horizontal");
-            //animator.SetTrigger("Jump");
-            rb.linearVelocityY = jump_speed;
-            rb.linearVelocityX=RunSpeed*input;  
-            isGrounded=false;  
+        anim.SetBool("isGrounded", isGrounded);
+        anim.SetFloat("xVelocity", rb.linearVelocityX);
+        anim.SetFloat("yVelocity", rb.linearVelocityY);
     }
 
-
-    void Horizontal_Move()
+    private void HandleMovement()
     {
-
-        float input = Input.GetAxis("Horizontal");
-        //animator.SetFloat("speed",Mathf.Abs(input));
-        rb.linearVelocityX = RunSpeed*input;
-        if (input < 0)
-        {
-
-            last_direction = -1;
-        }
-        else if (input > 0)
-        {
-            last_direction = 1;
-
-        }
-        sr.flipX = (last_direction == -1);
-        
-        
+        rb.linearVelocityX = xInput * moveSpeed;
     }
 
+    private void Jump()
+    {
+        if (isGrounded || bonusJump)
+        {
+            bonusJump = false;
+            rb.linearVelocityY = jumpForce;
+        }
+    }
 
+    private void HandleCollision()
+    {
+        isGrounded = Physics2D.OverlapCircle(GroundCheck.position, 0.1f, whatIsGround);
+        if(isGrounded)
+            bonusJump = true;
+    }
 
+    private void HandleFlip()
+    {
+        if (rb.linearVelocityX > 0 && !facingRight)
+            Flip();
+        else if (rb.linearVelocityX < 0 && facingRight)
+            Flip();
+    }
+
+    private void Flip()
+    {
+        transform.Rotate(0, 180, 0);
+        facingRight = !facingRight;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(transform.position, transform.position + new Vector3(0, -groundCheckDistance));
+    }
+    
 }
