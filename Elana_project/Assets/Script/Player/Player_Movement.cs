@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player_Movement : MonoBehaviour
 {
+    //STAT
+    public Combat_player player;
     //COMPONENT
     public Rigidbody2D rb;
     public SpriteRenderer sr;
@@ -11,12 +13,9 @@ public class Player_Movement : MonoBehaviour
    //MOVEMENT
     public int last_direction;
     public float RunSpeed=6f;
-       
+    public Transform Hitbox;  
     //public Animator animator;
-    //DASH
-    public float dashSpeed = 20f;
-    public float dashDuration = 0.2f;
-    public bool isDashing = false;
+ 
 
     //JUMPING
     public bool isGrounded; 
@@ -29,12 +28,19 @@ public class Player_Movement : MonoBehaviour
 
     void Start()
     {
+        player=GetComponent<Combat_player>();
         //animator= GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         sr= GetComponent<SpriteRenderer>();
+
     }
     void Update()
     {
+        if(player.Health<=0)
+            {
+                //animator.settrigger("dead");
+                return;
+            }
         isGrounded = Physics2D.OverlapCircle(GroundCheck.position, 0.1f, LayerGround);
         if (isGrounded)
         {
@@ -68,7 +74,7 @@ public class Player_Movement : MonoBehaviour
         float input = Input.GetAxis("Horizontal");
         //animator.SetFloat("speed",Mathf.Abs(input));
         rb.linearVelocityX = RunSpeed*input;
-                if (input < 0)
+        if (input < 0)
         {
 
             last_direction = -1;
@@ -79,6 +85,7 @@ public class Player_Movement : MonoBehaviour
 
         }
         sr.flipX = (last_direction == -1);
+        
         
     }
 
