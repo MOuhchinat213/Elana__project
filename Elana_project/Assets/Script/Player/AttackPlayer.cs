@@ -4,8 +4,9 @@ using UnityEngine;
 public class Combat_player : MonoBehaviour
 {
 
-    public Rigidbody2D rb;
-    public SpriteRenderer sr;
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private SpriteRenderer sr;
+    [SerializeField] private Animator anim;
 
     #region Stat
     public int Health;
@@ -24,6 +25,7 @@ public class Combat_player : MonoBehaviour
 
     void Start()
     {
+        anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         Health = MaxHealth;
@@ -49,8 +51,9 @@ public class Combat_player : MonoBehaviour
     
     void Basic_Attack()
     {
+
          Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(hitbox.position, range, EnemyLayer);
-         Health--;
+         anim.SetTrigger("attack");
          foreach (Collider2D enemy in hitEnemies)
         {
             //enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
