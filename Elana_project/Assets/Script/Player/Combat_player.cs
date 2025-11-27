@@ -20,6 +20,7 @@ public class Combat_player : MonoBehaviour
     public LayerMask EnemyLayer;
     public float range=0.5f;
     public Transform hitbox;
+    public bool isAttacking;
 
     #endregion
 
@@ -27,7 +28,7 @@ public class Combat_player : MonoBehaviour
     {
         anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        sr = GetComponent<SpriteRenderer>();
+        sr = GetComponentInChildren<SpriteRenderer>();
         Health = MaxHealth;
         Mana = 30;
 
@@ -40,6 +41,7 @@ public class Combat_player : MonoBehaviour
         if(Input.GetMouseButtonDown(0))
             {
                 Basic_Attack();
+                isAttacking=false;
             }
         if(Input.GetKeyDown(KeyCode.R))
         {
@@ -48,17 +50,14 @@ public class Combat_player : MonoBehaviour
     }
 
     #region Close Range Attack
-    
+
     void Basic_Attack()
     {
-
-         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(hitbox.position, range, EnemyLayer);
-         anim.SetTrigger("attack");
-         foreach (Collider2D enemy in hitEnemies)
-        {
-            //enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
-        }
+        isAttacking=true;
+        anim.SetTrigger("attack");
     }
+    
+
     
     #endregion
     

@@ -10,8 +10,8 @@ public class Camera : MonoBehaviour
     {
         Vector3 pos = follow.position;
         pos.x = follow.position.x;
-        pos.y=0;
-        pos.z=-4f;
+        pos.y=follow.position.y;
+        pos.z=-5f;
         transform.position=pos;
     
     }

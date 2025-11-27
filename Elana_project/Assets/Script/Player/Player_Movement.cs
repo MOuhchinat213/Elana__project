@@ -16,7 +16,7 @@ public class Player_Movement : MonoBehaviour
     private float xInput;
     private bool facingRight = true;
     [Header ("Dashing")]
-    [SerializeField] private float dashForce = 15f;
+    [SerializeField] private float dashForce = 35f;
     [SerializeField] private float dashDuration = 0.2f;
     [SerializeField] private float dashCooldown = 1f;
     [SerializeField] private bool canDash = true;
@@ -32,12 +32,14 @@ public class Player_Movement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
         stats  = GetComponent<Combat_player>();
-        originalGravity=rb.gravityScale;
+        originalGravity=1;
     }
 
     void Update()
     {
-       if(stats.Health<=0)
+        if(stats.isAttacking)
+            return;
+        if(stats.Health<=0)
         {
             HandleDeath();
             return;
@@ -83,6 +85,8 @@ public class Player_Movement : MonoBehaviour
 
     private void HandleMovement()
     {
+        if(isDashing) 
+            return;
         if(!isGrounded)
             anim.SetBool("isGrounded",false);
         rb.linearVelocityX = xInput * moveSpeed;
@@ -123,17 +127,19 @@ public class Player_Movement : MonoBehaviour
     {
         canDash = false;
         isDashing = true;
-        originalGravity = rb.gravityScale;
-        Debug.Log("JE DASH TA MERE LA PUTE");
         rb.gravityScale = 0f;
-        float direction = transform.localScale.x > 0 ? 1 : -1;
-        rb.linearVelocityX = direction * dashForce;
-        anim.SetTrigger("isDead");
-        yield return new WaitForSeconds(0.2f);
-
+        anim.SetTrigger("isDashing");
+        float dashDirection = facingRight ? 1f : -1f;
+        float dashTime = 0f;
+        while(dashTime < dashDuration)
+        {
+            rb.linearVelocity = new Vector2(dashDirection * dashForce, 0f);
+            dashTime += Time.deltaTime;
+            yield return null; 
+        }
         rb.gravityScale = originalGravity;
         isDashing = false;
-
+        
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }
