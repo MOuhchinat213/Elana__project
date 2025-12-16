@@ -26,12 +26,14 @@ public class Player_Movement : MonoBehaviour
     [SerializeField] private bool isGrounded;
     [SerializeField] private LayerMask whatIsGround;
     [SerializeField] private Transform GroundCheck;
+    [SerializeField] private TrailRenderer tr;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
         stats  = GetComponent<Combat_player>();
+        tr=GetComponentInChildren<TrailRenderer>();
         originalGravity=1;
     }
 
@@ -45,6 +47,8 @@ public class Player_Movement : MonoBehaviour
             return;
         }
         if(isDashing)
+            return;
+        if(stats.isHealing)
             return;
 
         HandleDash();
@@ -131,6 +135,7 @@ public class Player_Movement : MonoBehaviour
         anim.SetTrigger("isDashing");
         float dashDirection = facingRight ? 1f : -1f;
         float dashTime = 0f;
+        tr.emitting=true;
         while(dashTime < dashDuration)
         {
             rb.linearVelocity = new Vector2(dashDirection * dashForce, 0f);
@@ -139,7 +144,7 @@ public class Player_Movement : MonoBehaviour
         }
         rb.gravityScale = originalGravity;
         isDashing = false;
-        
+        tr.emitting=false;
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }

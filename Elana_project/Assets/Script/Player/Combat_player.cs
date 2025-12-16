@@ -1,5 +1,7 @@
 using System;
+using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Combat_player : MonoBehaviour
 {
@@ -7,11 +9,12 @@ public class Combat_player : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private SpriteRenderer sr;
     [SerializeField] private Animator anim;
+    [SerializeField] private Image manabar;
 
     #region Stat
     public int Health;
     public int MaxHealth = 5;
-    public int Mana;
+    public float Mana;
 
     #endregion
 
@@ -21,6 +24,7 @@ public class Combat_player : MonoBehaviour
     public float range=0.5f;
     public Transform hitbox;
     public bool isAttacking;
+    public bool isHealing;
 
     #endregion
 
@@ -30,7 +34,8 @@ public class Combat_player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponentInChildren<SpriteRenderer>();
         Health = MaxHealth;
-        Mana = 30;
+        Mana = 1;
+        manabar.fillAmount= Mana;
 
     }
 
@@ -46,7 +51,9 @@ public class Combat_player : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.R))
         {
             Healing_spell();
+            isHealing=false;
         }
+        manabar.fillAmount= Mana;
     }
 
     #region Close Range Attack
@@ -65,11 +72,16 @@ public class Combat_player : MonoBehaviour
     #region Spells
     void Healing_spell()
     {
-
-        if(Mana>=15 && Health<MaxHealth)
+        float temp  = rb.gravityScale;
+        isHealing=true;
+        if(Mana>=0.5f && Health<MaxHealth)
         {
-            Mana-=15;
+            rb.gravityScale=0;
+            anim.SetTrigger("isHealing");
+            Mana-=0.5f;
+            
             Health+=2;
+            rb.gravityScale=temp;
             if(Health>MaxHealth)
                 Health=MaxHealth;
         }
