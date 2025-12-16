@@ -1,16 +1,20 @@
 using System;
+using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Combat_player : MonoBehaviour
 {
 
-    public Rigidbody2D rb;
-    public SpriteRenderer sr;
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private SpriteRenderer sr;
+    [SerializeField] private Animator anim;
+    [SerializeField] private Image manabar;
 
     #region Stat
     public int Health;
     public int MaxHealth = 5;
-    public int Mana;
+    public float Mana;
 
     #endregion
 
@@ -19,15 +23,19 @@ public class Combat_player : MonoBehaviour
     public LayerMask EnemyLayer;
     public float range=0.5f;
     public Transform hitbox;
+    public bool isAttacking;
+    public bool isHealing;
 
     #endregion
 
     void Start()
     {
+        anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        sr = GetComponent<SpriteRenderer>();
+        sr = GetComponentInChildren<SpriteRenderer>();
         Health = MaxHealth;
-        Mana = 30;
+        Mana = 1;
+        manabar.fillAmount= Mana;
 
     }
 
@@ -38,24 +46,25 @@ public class Combat_player : MonoBehaviour
         if(Input.GetMouseButtonDown(0))
             {
                 Basic_Attack();
+                isAttacking=false;
             }
         if(Input.GetKeyDown(KeyCode.R))
         {
             Healing_spell();
+            isHealing=false;
         }
+        manabar.fillAmount= Mana;
     }
 
     #region Close Range Attack
-    
+
     void Basic_Attack()
     {
-         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(hitbox.position, range, EnemyLayer);
-         Health--;
-         foreach (Collider2D enemy in hitEnemies)
-        {
-            //enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
-        }
+        isAttacking=true;
+        anim.SetTrigger("attack");
     }
+    
+
     
     #endregion
     
@@ -63,11 +72,16 @@ public class Combat_player : MonoBehaviour
     #region Spells
     void Healing_spell()
     {
-
-        if(Mana>=15 && Health<MaxHealth)
+        float temp  = rb.gravityScale;
+        isHealing=true;
+        if(Mana>=0.5f && Health<MaxHealth)
         {
-            Mana-=15;
+            rb.gravityScale=0;
+            anim.SetTrigger("isHealing");
+            Mana-=0.5f;
+            
             Health+=2;
+            rb.gravityScale=temp;
             if(Health>MaxHealth)
                 Health=MaxHealth;
         }
