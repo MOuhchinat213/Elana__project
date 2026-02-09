@@ -10,10 +10,11 @@ public class Combat_player : MonoBehaviour
     [SerializeField] private SpriteRenderer sr;
     [SerializeField] private Animator anim;
     [SerializeField] private Image manabar;
+    [SerializeField] private Image healthbar;
 
     #region Stat
-    public int Health;
-    public int MaxHealth = 5;
+    public float Health;
+    public float MaxHealth = 1;
     public float Mana;
 
     #endregion
@@ -36,6 +37,7 @@ public class Combat_player : MonoBehaviour
         Health = MaxHealth;
         Mana = 1;
         manabar.fillAmount= Mana;
+        healthbar.fillAmount= Health;
 
     }
 
@@ -44,16 +46,17 @@ public class Combat_player : MonoBehaviour
         if(Health<=0)
             return;
         if(Input.GetMouseButtonDown(0))
-            {
-                Basic_Attack();
-                isAttacking=false;
-            }
+        {
+            Basic_Attack();
+            isAttacking=false;
+        }
         if(Input.GetKeyDown(KeyCode.R))
         {
             Healing_spell();
             isHealing=false;
         }
         manabar.fillAmount= Mana;
+        healthbar.fillAmount = Health;
     }
 
     #region Close Range Attack
@@ -80,7 +83,7 @@ public class Combat_player : MonoBehaviour
             anim.SetTrigger("isHealing");
             Mana-=0.5f;
             
-            Health+=2;
+            Health+=0.3f;
             rb.gravityScale=temp;
             if(Health>MaxHealth)
                 Health=MaxHealth;
