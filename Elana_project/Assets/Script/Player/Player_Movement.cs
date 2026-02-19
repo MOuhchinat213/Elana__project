@@ -12,7 +12,7 @@ public class Player_Movement : MonoBehaviour
     [Header("Movement details")]
     [SerializeField] private float moveSpeed = 3.5f;
     [SerializeField] private float jumpForce = 3;
-    [SerializeField] private bool bonusJump = true;
+    [SerializeField] private int  bonusJump = 2;
     private float xInput;
     private bool facingRight = true;
     [Header ("Dashing")]
@@ -98,9 +98,9 @@ public class Player_Movement : MonoBehaviour
 
     private void Jump()
     {
-        if (isGrounded || bonusJump)
+        if (isGrounded || bonusJump>0)
         {
-            bonusJump = false;
+            bonusJump -=1;
             rb.linearVelocityY = jumpForce;
         }
     }
@@ -110,7 +110,7 @@ public class Player_Movement : MonoBehaviour
     {
         isGrounded = Physics2D.OverlapCircle(GroundCheck.position, 0.1f, whatIsGround);
         if(isGrounded)
-            bonusJump = true;
+            bonusJump = 2;
     }
 
     private void HandleFlip()

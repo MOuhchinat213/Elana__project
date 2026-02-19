@@ -112,12 +112,12 @@ TextureImporter:
       name: male_hero-combo_1_0
       rect:
         serializedVersion: 2
-        x: 53
-        y: 47
-        width: 60
-        height: 40
+        x: 0
+        y: 0
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -134,12 +134,12 @@ TextureImporter:
       name: male_hero-combo_1_1
       rect:
         serializedVersion: 2
-        x: 180
-        y: 47
-        width: 63
-        height: 39
+        x: 128
+        y: 0
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -156,12 +156,12 @@ TextureImporter:
       name: male_hero-combo_1_2
       rect:
         serializedVersion: 2
-        x: 307
-        y: 47
-        width: 61
-        height: 31
+        x: 256
+        y: 0
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -174,33 +174,11 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: male_hero-combo_1_3
-      rect:
-        serializedVersion: 2
-        x: 360
-        y: 52
-        width: 6
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 034be15d1f60c8110800000000000000
-      internalID: 1264393231116710960
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 7581c3084d5b1654697e4f6678affac0
     internalID: 0
     vertices: []
     indices: 
@@ -208,12 +186,13 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":3.0,"y":1.0},"gridSpriteSize":{"x":128.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       male_hero-combo_1_0: -817223447185994114
       male_hero-combo_1_1: 7021625484444776659
       male_hero-combo_1_2: 7282760613219019248
-      male_hero-combo_1_3: 1264393231116710960
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
