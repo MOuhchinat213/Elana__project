@@ -5,7 +5,6 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     [Header("Player components")]
-    public Animator anim;
     public Rigidbody2D rb;
     public PlayerInput playerInput;
     
@@ -41,7 +40,6 @@ public class Player : MonoBehaviour
     {
         
         Flip();
-        HandleAnimation();
     }
 
 
@@ -81,6 +79,7 @@ public class Player : MonoBehaviour
             }
             
         }
+<<<<<<< HEAD
 
         void HandleAnimation()
         {
@@ -93,6 +92,9 @@ public class Player : MonoBehaviour
             
         }
 
+=======
+    
+>>>>>>> parent of 9213d28 (walking and idle animation added)
         void CheckGrounded()
         {
             isGrounded=Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
