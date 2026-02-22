@@ -7,9 +7,11 @@ using UnityEngine.UI;
 public class Combat_player : MonoBehaviour
 {
 
-    [SerializeField] public Rigidbody2D rb;
-    [SerializeField] public Animator anim;
-
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private SpriteRenderer sr;
+    [SerializeField] private Animator anim;
+    //[SerializeField] private Image manabar;
+    //[SerializeField] private Image healthbar;
 
     #region Stat
     public float Health;
@@ -32,10 +34,10 @@ public class Combat_player : MonoBehaviour
     {
         anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        GetComponentInChildren<SpriteRenderer>();
+        sr = GetComponentInChildren<SpriteRenderer>();
         Health = MaxHealth;
         Mana = 1;
-       
+        //manabar.fillAmount= Mana;
 
 
     }
@@ -49,8 +51,12 @@ public class Combat_player : MonoBehaviour
             Basic_Attack();
             isAttacking=false;
         }
-
-        
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            StartCoroutine(Healing_spell());
+            isHealing=false;
+        }
+        //manabar.fillAmount= Mana;
 
     }
 
@@ -67,5 +73,29 @@ public class Combat_player : MonoBehaviour
     #endregion
     
     
+    #region Spells
+    IEnumerator Healing_spell()
+    {
+        float temp  = rb.gravityScale;
+        isHealing=true;
+        if(Mana>=0.5f && Health<MaxHealth)
+        {
+            rb.gravityScale=0;
+            rb.linearVelocity = Vector2.zero;
+            anim.SetTrigger("isHealing");
+            yield return null;
+            float heal_time= anim.GetCurrentAnimatorStateInfo(0).length;
+            yield return new WaitForSeconds (heal_time-0.2f);
+            
+            Mana-=0.5f;
+            
+            Health+=1;
+            rb.gravityScale=temp;
+            
+            if(Health>MaxHealth)
+                Health=MaxHealth;
+        }
 
+    }
+    #endregion
 }
