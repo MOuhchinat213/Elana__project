@@ -27,6 +27,9 @@ public class Player : MonoBehaviour
     public LayerMask groundLayer;
     private bool isGrounded;
 
+    [Header("Dashing Parameters")] 
+    public float dashDuration;
+    
 
     void Start()
     {
