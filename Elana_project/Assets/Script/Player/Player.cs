@@ -76,12 +76,18 @@ public class Player : MonoBehaviour
                 } 
                 jumpReleased = false;
             }
+            
         }
 
         void HandleAnimation()
         {
+            anim.SetBool("isJumping",rb.linearVelocity.y > 0.1f);
+            anim.SetBool("isGrounded",isGrounded);
+            anim.SetFloat("yVelocity",rb.linearVelocity.y);
             anim.SetBool("isIdle",Mathf.Abs(moveInput.x)<0.1f && isGrounded);
             anim.SetBool("isWalking",Mathf.Abs(moveInput.x)>0.1f && isGrounded);
+           
+            
         }
 
         void CheckGrounded()
