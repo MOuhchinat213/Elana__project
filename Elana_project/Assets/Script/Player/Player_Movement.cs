@@ -12,7 +12,7 @@ public class Player_Movement : MonoBehaviour
     [Header("Movement details")]
     [SerializeField] private float moveSpeed = 3.5f;
     [SerializeField] private float jumpForce = 3;
-    [SerializeField] private int  bonusJump = 2; //double jump start
+    [SerializeField] private int  bonusJump = 2;
     private float xInput;
     private bool facingRight = true;
     [Header ("Dashing")]
@@ -39,9 +39,6 @@ public class Player_Movement : MonoBehaviour
 
     void Update()
     {
-        if (!isGrounded && bonusJump!=0)
-            bonusJump = 1;
-
         if(stats.isAttacking)
             return;
         if(stats.Health<=0)
@@ -62,40 +59,33 @@ public class Player_Movement : MonoBehaviour
         HandleAnimations();
     }
 
-    #region Animation
-
-        private void HandleDeath()
+    private void HandleDeath()
+    {
+        if(stats.Health<=0)
         {
-            if(stats.Health<=0)
-            {
-                anim.SetTrigger("isDead");
-            }
+            anim.SetTrigger("isDead");
         }
-        private void HandleAnimations()
-        {
-            anim.SetBool("isGrounded", isGrounded);
-            anim.SetFloat("xVelocity", rb.linearVelocityX);
-            anim.SetFloat("yVelocity", rb.linearVelocityY);
-        }
-    #endregion
+    }
+    private void HandleInput()
+    {
+        xInput = Input.GetAxisRaw("Horizontal");
 
-
-
-    #region Movement gameplay
-        private void HandleInput()
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            xInput = Input.GetAxisRaw("Horizontal");
-    
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                Jump();
-            }
+            Jump();
         }
-        private void HandleDash()
-        {
-            if(Input.GetKeyDown(KeyCode.LeftShift) && canDash)
-                StartCoroutine(Dash());
-        }
+    }
+    private void HandleDash()
+    {
+        if(Input.GetKeyDown(KeyCode.LeftShift) && canDash)
+            StartCoroutine(Dash());
+    }    
+    private void HandleAnimations()
+    {
+        anim.SetBool("isGrounded", isGrounded);
+        anim.SetFloat("xVelocity", rb.linearVelocityX);
+        anim.SetFloat("yVelocity", rb.linearVelocityY);
+    }
 
     private void HandleMovement()
     {
@@ -158,5 +148,4 @@ public class Player_Movement : MonoBehaviour
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }
-    #endregion
 }
